@@ -31,10 +31,10 @@ session.commit()
 cleats = Item(name='cleats', description='special shoes worn when playing soccer', category=soccer.name)
 session.add(cleats)
 
-ball = Item(name='soccer ball', description='a ball specifically designed for playing a game of soccer', category=soccer.name)
+ball = Item(name='ball', description='a ball specifically designed for playing a game of soccer', category=soccer.name)
 session.add(ball)
 
-shin_guards = Item(name='shin guards', description='guards to protect your shins when playing soccer', category=soccer.name)
+shin_guards = Item(name='shinguards', description='guards to protect your shins when playing soccer', category=soccer.name)
 session.add(shin_guards)
 
 goggles = Item(name='goggles', description='protective glasses worn when snowboarding to keep your eyes safe', category=snowboarding.name)

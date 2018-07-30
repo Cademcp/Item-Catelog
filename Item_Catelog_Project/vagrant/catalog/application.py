@@ -50,6 +50,25 @@ def showCategoryItmes(category):
     return jsonify(temp)
 
 
+@app.route('/catalog/<string:category>/<string:item>')
+def showItemInfo(category, item):
+    session = DBSession()
+
+    info = session.query(Item).filter_by(category = category, name = item)
+    
+    temp = []
+    for i in info:
+        temp.append(i.name)
+        temp.append(i.description)
+    session.commit()
+    return jsonify(temp)
+
+
+@app.route('/catalog/<string:category>/<string:item>/edit', methods=['GET', 'POST'])
+def editItem(category, item):
+    if request.method == 'GET':
+        return render_template('editItem.html')
+
 if __name__ == '__main__':
     app.debug = True
     app.run(host = '0.0.0.0', port=5000)
