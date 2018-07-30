@@ -23,30 +23,30 @@ Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 
-session = DBSession()
+
 
 @app.route('/')
 @app.route('/catalog')
 def showCategories():
-    
+    session = DBSession()
     categories = session.query(Category).all()
     temp = []
     for i in categories:
         temp.append(i.name)
-
+    session.commit()
     return jsonify(temp)
 
 
 @app.route('/catalog/<string:category>/items')
 def showCategoryItmes(category):
+    session = DBSession()
 
-
-    items = session.query(Item).filter_by()
+    items = session.query(Item).filter_by(category = category)
 
     temp = []
     for i in items:
         temp.append(i.name)
-
+    session.commit()
     return jsonify(temp)
 
 
