@@ -8,8 +8,7 @@ import string
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import httplib2
-import json
-from flask import make_response
+from flask import make_response, request, jsonify
 import requests
 
 from sqlalchemy import create_engine, inspect
@@ -18,6 +17,37 @@ from sqlalchemy.orm import sessionmaker
 from dbsetup import Category, Base, Item
 
 app = Flask(__name__)
+
+engine = create_engine('sqlite:///item_catelog.db')
+Base.metadata.bind = engine
+
+DBSession = sessionmaker(bind=engine)
+
+session = DBSession()
+
+@app.route('/')
+@app.route('/catalog')
+def showCategories():
+    
+    categories = session.query(Category).all()
+    temp = []
+    for i in categories:
+        temp.append(i.name)
+
+    return jsonify(temp)
+
+
+@app.route('/catalog/<string:category>/items')
+def showCategoryItmes(category):
+
+
+    items = session.query(Item).filter_by()
+
+    temp = []
+    for i in items:
+        temp.append(i.name)
+
+    return jsonify(temp)
 
 
 if __name__ == '__main__':
