@@ -1,0 +1,14 @@
+<html>
+    <head>
+    </head>
+
+    <body>
+        <h1>Edit Item</h1>
+        <form action="{{ url_for('delete') }}" name="delete" method="POST">
+                Are you sure you want to delete {{ item }}?<br><br>
+
+                <button type="submit" name="delete_value" value="{{ item }}">Yes</button>
+                <button type="submit" name="delete_value" value="no">No</button>
+              </form> 
+    </body>
+</html>

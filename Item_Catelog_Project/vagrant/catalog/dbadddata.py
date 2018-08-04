@@ -34,13 +34,13 @@ session.add(cleats)
 ball = Item(name='ball', description='a ball specifically designed for playing a game of soccer', category=soccer.name)
 session.add(ball)
 
-shin_guards = Item(name='shinguards', description='guards to protect your shins when playing soccer', category=soccer.name)
-session.add(shin_guards)
+shinguards = Item(name='shinguards', description='guards to protect your shins when playing soccer', category=soccer.name)
+session.add(shinguards)
 
 goggles = Item(name='goggles', description='protective glasses worn when snowboarding to keep your eyes safe', category=snowboarding.name)
 session.add(goggles)
 
-board = Item(name='snowboard', description='Most important piece of equipment for snowboarding; used to carving down mountains', category=snowboarding.name)
-session.add(board)
+snowboard = Item(name='snowboard', description='Most important piece of equipment for snowboarding; used to carving down mountains', category=snowboarding.name)
+session.add(snowboard)
 
 session.commit()
