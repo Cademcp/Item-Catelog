@@ -1,0 +1,16 @@
+<html>
+    <head>
+    </head>
+
+    <body>
+        {% for i in item %} 
+        <h1>{{ i.name }} Description</h1>
+          <p>{{ i.description }}</p>
+        
+          <input type="button" onclick="location.href='http://localhost:5000/catalog/{{category}}/items';" value="Back To Items" />
+          <input type="button" onclick="location.href='http://localhost:5000/catalog/{{i.name}}/edit';" value="Edit" />
+          <input type="button" onclick="location.href='http://localhost:5000/catalog/{{category}}/{{i.name}}/delete';" value="Delete" />
+
+          {% endfor %}
+    </body>
+</html>

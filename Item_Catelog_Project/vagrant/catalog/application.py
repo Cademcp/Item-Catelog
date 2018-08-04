@@ -24,11 +24,8 @@ DBSession = sessionmaker(bind=engine)
 def showCategories():
     session = DBSession()
     categories = session.query(Category).all()
-    temp = []
-    for i in categories:
-        temp.append(i.name)
     session.commit()
-    return jsonify(temp)
+    return render_template('home.html', item=categories)
 
 
 @app.route('/catalog/<string:category>/items')
@@ -36,42 +33,47 @@ def showCategoryItems(category):
     session = DBSession()
 
     items = session.query(Item).filter_by(category=category)
-
-    temp = []
-    for i in items:
-        temp.append(i.name)
     session.commit()
-    return jsonify(temp)
+    return render_template('showItems.html', category=category, item=items)
 
 
 @app.route('/catalog/<string:category>/<string:item>')
 def showItemInfo(category, item):
     session = DBSession()
-
+    new_category = urllib.unquote(category)
     new_item = urllib.unquote(item)
 
-    info = session.query(Item).filter_by(category=category, name=new_item)
-
-    temp = []
-    for i in info:
-        temp.append(i.name)
-        temp.append(i.description)
+    info = session.query(Item).filter_by(category=new_category, name=new_item)
     session.commit()
-    return jsonify(temp)
+
+    return render_template('showItemInfo.html', category=new_category, item=info)
 
 
-@app.route('/catalog/<string:item>/edit', methods=['GET', 'POST'])
+@app.route('/catalog/<string:item>/edit', methods=['GET'])
 def editItem(item):
     new_item = urllib.unquote(item)
-    if request.method == 'GET':
-        return render_template('editItem.html')
+
+    return render_template('editItem.html', item=new_item)
 
 
-@app.route('/catalog/<string:item>/delete', methods=['GET'])
-def deleteItem(item):
+@app.route('/editItem', methods=['POST'])
+def edit():
+    decision_maker = request.form
+    # session = DBSession()
+    
+    # # new_item = session.query(Item).filter_by(name=).update({"name": u"Bob Marley"})
+    # session.add(new_item)
+    # session.commit()
+
+    return redirect('http://localhost:5000')
+
+
+@app.route('/catalog/<string:category>/<string:item>/delete', methods=['GET'])
+def deleteItem(category, item):
+    new_category = urllib.unquote(category)
     new_item = urllib.unquote(item)
 
-    return render_template('deleteItem.html', item=new_item)
+    return render_template('deleteItem.html', category=new_category, item=new_item)
 
 
 @app.route('/deleteItem', methods=['POST'])
