@@ -32,7 +32,7 @@ def showCategories():
 
 
 @app.route('/catalog/<string:category>/items')
-def showCategoryItmes(category):
+def showCategoryItems(category):
     session = DBSession()
 
     items = session.query(Item).filter_by(category=category)
@@ -83,6 +83,31 @@ def delete():
   
         session.delete(info)
         session.commit()
+
+    return redirect('http://localhost:5000')
+
+
+@app.route('/catalog/add', methods=['GET'])
+def addItem():
+    session = DBSession()
+    info = session.query(Category).all()
+
+    temp = []
+    for i in info:
+        temp.append(i.name)
+    session.commit()
+
+    return render_template('addItem.html', item=info)
+
+
+@app.route('/addItem', methods=['POST'])
+def add():
+    decision_maker = request.form
+    session = DBSession()
+    
+    new_item = Item(name=decision_maker['itemName'], description=decision_maker['itemDescription'], category=decision_maker['category'])
+    session.add(new_item)
+    session.commit()
 
     return redirect('http://localhost:5000')
 
