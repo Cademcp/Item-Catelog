@@ -9,16 +9,16 @@
             <input type="text" name="itemName" value="name goes here">
             <br><br>
             Item Description:<br>
-            <input type="text" name="itemDescription" value="description goes here">
+            <textarea rows="4" cols="50" name="itemDescription" value="Description goes here">Description goes here</textarea>
             <br><br>
             Category:<br>
             <select name="category">
-                {% for i in item %}
+                {% for i in info %}
                 <option name="{{ i.name }}">{{ i.name }}</option>
                 {% endfor %}
             </select>
             <br><br>
-            <input type="reset" value="Reset">
+            <input type="button" onclick="location.href='http://localhost:5000/catalog/{{category}}/items';" value="Back To Items" />
             <input type="submit" value="Submit">
         </form> 
     </body>

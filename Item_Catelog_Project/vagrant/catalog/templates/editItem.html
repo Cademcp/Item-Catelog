@@ -3,22 +3,24 @@
     </head>
 
     <body>
-        <h1>Edit Item</h1>
+        {% for i in item_info %}
+        <h1>Edit {{i.name}}</h1>
         <form action="{{ url_for('edit') }}" name="edit" method="POST">
             Item Name:<br>
-            <input type="text" name="itemName" value="name goes here">
+            <input type="text" name="itemName" value="{{i.name}}">
             <br><br>
             Item Description:<br>
-            <input type="text" name="itemDescription" value="description goes here">
+            <textarea rows="4" cols="50" name="itemDescription" value="{{i.description}}">{{i.description}}</textarea>
             <br><br>
+        {% endfor %}
             Category:<br>
             <select name="category">
-                {% for i in item %}
+                {% for i in category_info %}
                 <option name="{{ i.name }}">{{ i.name }}</option>
                 {% endfor %}
             </select>
             <br><br>
-            <input type="reset" value="Reset">
+            <input type="button" onclick="location.href='http://localhost:5000/catalog/{{category}}/{{item}}';" value="Back To Item" />
             <input type="submit" value="Submit">
         </form> 
     </body>

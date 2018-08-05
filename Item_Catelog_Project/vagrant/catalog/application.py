@@ -49,11 +49,17 @@ def showItemInfo(category, item):
     return render_template('showItemInfo.html', category=new_category, item=info)
 
 
-@app.route('/catalog/<string:item>/edit', methods=['GET'])
-def editItem(item):
+@app.route('/catalog/<string:category>/<string:item>/edit', methods=['GET'])
+def editItem(category, item):
+    new_category = urllib.unquote(category)
     new_item = urllib.unquote(item)
 
-    return render_template('editItem.html', item=new_item)
+    session = DBSession()
+    category_info = session.query(Category).all()
+    item_info = session.query(Item).filter_by(category=new_category, name=new_item)
+    session.commit()
+
+    return render_template('editItem.html', category=new_category, item=new_item, category_info=category_info, item_info=item_info)
 
 
 @app.route('/editItem', methods=['POST'])
@@ -89,17 +95,15 @@ def delete():
     return redirect('http://localhost:5000')
 
 
-@app.route('/catalog/add', methods=['GET'])
-def addItem():
+@app.route('/catalog/<string:category>/items/add', methods=['GET'])
+def addItem(category):
+    new_category = urllib.unquote(category)
+
     session = DBSession()
     info = session.query(Category).all()
-
-    temp = []
-    for i in info:
-        temp.append(i.name)
     session.commit()
 
-    return render_template('addItem.html', item=info)
+    return render_template('addItem.html', info=info, category=new_category)
 
 
 @app.route('/addItem', methods=['POST'])
