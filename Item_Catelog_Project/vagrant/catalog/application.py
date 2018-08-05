@@ -56,7 +56,8 @@ def editItem(category, item):
 
     session = DBSession()
     category_info = session.query(Category).all()
-    item_info = session.query(Item).filter_by(category=new_category, name=new_item)
+    item_info = session.query(Item).filter_by(
+        category=new_category, name=new_item)
     session.commit()
 
     return render_template('editItem.html', category=new_category, item=new_item, category_info=category_info, item_info=item_info)
@@ -65,11 +66,12 @@ def editItem(category, item):
 @app.route('/editItem', methods=['POST'])
 def edit():
     decision_maker = request.form
-    # session = DBSession()
+    session = DBSession()
+
+    session.query(Item).filter_by(id=decision_maker['itemID']).update(
+        {"name": decision_maker['itemName'], "description": decision_maker['itemDescription'], 'category': decision_maker['itemCategory']})
     
-    # # new_item = session.query(Item).filter_by(name=).update({"name": u"Bob Marley"})
-    # session.add(new_item)
-    # session.commit()
+    session.commit()
 
     return redirect('http://localhost:5000')
 
@@ -88,7 +90,7 @@ def delete():
     session = DBSession()
     if decision_maker != 'no':
         info = session.query(Item).filter_by(name=decision_maker).first()
-  
+
         session.delete(info)
         session.commit()
 
@@ -110,8 +112,9 @@ def addItem(category):
 def add():
     decision_maker = request.form
     session = DBSession()
-    
-    new_item = Item(name=decision_maker['itemName'], description=decision_maker['itemDescription'], category=decision_maker['category'])
+
+    new_item = Item(name=decision_maker['itemName'],
+                    description=decision_maker['itemDescription'], category=decision_maker['category'])
     session.add(new_item)
     session.commit()
 

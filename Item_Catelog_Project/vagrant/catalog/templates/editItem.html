@@ -8,15 +8,16 @@
         <form action="{{ url_for('edit') }}" name="edit" method="POST">
             Item Name:<br>
             <input type="text" name="itemName" value="{{i.name}}">
+            <input type="hidden" name="itemID" value="{{i.id}}">
             <br><br>
             Item Description:<br>
             <textarea rows="4" cols="50" name="itemDescription" value="{{i.description}}">{{i.description}}</textarea>
             <br><br>
         {% endfor %}
             Category:<br>
-            <select name="category">
+            <select name="itemCategory">
                 {% for i in category_info %}
-                <option name="{{ i.name }}">{{ i.name }}</option>
+                <option name="itemCategory" value="{{ i.name }}">{{ i.name }}</option>
                 {% endfor %}
             </select>
             <br><br>
