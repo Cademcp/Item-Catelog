@@ -22,10 +22,39 @@ session = DBSession()
 soccer = Category(name='Soccer')
 session.add(soccer)
 session.commit()
- 
+
+basketball = Category(name='Basketball')
+session.add(basketball)
+session.commit()
+
+baseball = Category(name='Baseball')
+session.add(baseball)
+session.commit()
+
+frisbee = Category(name='Frisbee')
+session.add(frisbee)
+session.commit()
+
 snowboarding = Category(name='Snowboarding')
 session.add(snowboarding)
 session.commit()
+
+rockclimbing = Category(name='Rock Climbing')
+session.add(rockclimbing)
+session.commit()
+
+foosball = Category(name='Foosball')
+session.add(foosball)
+session.commit()
+
+skating = Category(name='Skating')
+session.add(skating)
+session.commit()
+
+hockey = Category(name='Hockey')
+session.add(hockey)
+session.commit()
+ 
 
 # Insert an item in the item table
 cleats = Item(name='cleats', description='special shoes worn when playing soccer', category=soccer.name)
