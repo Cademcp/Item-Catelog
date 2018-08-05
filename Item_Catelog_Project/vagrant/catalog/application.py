@@ -28,6 +28,23 @@ def showCategories():
     return render_template('home.html', item=categories)
 
 
+@app.route('/catalog/JSON')
+def showCategoriesJSON():
+    session = DBSession()
+    db_category = session.query(Category).all()
+    categories = list()
+    for category in db_category:
+        db_items = session.query(Item).filter_by(category=category.name)
+        items = list()
+        for item in db_items:
+            items.append(item.serialize)
+        categories.append({'id': category.id,
+                           'name': category.name,
+                           'Item': items})
+
+    return jsonify(Category=categories)
+
+
 @app.route('/catalog/<string:category>/items')
 def showCategoryItems(category):
     session = DBSession()
@@ -70,7 +87,7 @@ def edit():
 
     session.query(Item).filter_by(id=decision_maker['itemID']).update(
         {"name": decision_maker['itemName'], "description": decision_maker['itemDescription'], 'category': decision_maker['itemCategory']})
-    
+
     session.commit()
 
     return redirect('http://localhost:5000')
