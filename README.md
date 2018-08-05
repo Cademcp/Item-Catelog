@@ -13,7 +13,7 @@ To get the program up and running locally, first clone this repository: https://
 Navigate to the catalog subdirectory using cd
 
 ```
-cd Item-Catelog/Item_Catelog_Project/vagrant
+cd Item_Catelog_Project/vagrant
 ```
 
 Once in the vagrant directory, run the following command to spin up the VM:
