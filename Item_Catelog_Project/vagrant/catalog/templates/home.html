@@ -9,6 +9,8 @@
           <a href="http://localhost:5000/catalog/{{i.name}}/items">{{ i.name }}</a> <br><br>
           {% endfor %}
 
+          <input type="button" id="login" onclick="location.href='http://localhost:5000/login';" value="Login" />
+          <input type="button" id="logout" onclick="location.href='http://localhost:5000/gdisconnect';" value="Logout" />
 
     </body>
 </html>
