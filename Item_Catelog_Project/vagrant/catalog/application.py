@@ -1,7 +1,12 @@
 from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, request, make_response
 from flask import session as login_session
 
-import random, string, urllib, httplib2, json, requests
+import random
+import string
+import urllib
+import httplib2
+import json
+import requests
 
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
@@ -22,8 +27,10 @@ Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 
+
 @app.route('/login')
 def showLogin():
+    """Shows login screen when user tries to access information that they must be authenticated for"""
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                     for x in xrange(32))
     login_session['state'] = state
@@ -119,7 +126,8 @@ def gdisconnect():
     access_token = login_session.get('access_token')
     if access_token is None:
         print 'Access Token is None'
-        response = make_response(json.dumps('Current user not connected.'), 401)
+        response = make_response(json.dumps(
+            'Current user not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
     print 'In gdisconnect access token is %s', access_token
@@ -140,7 +148,8 @@ def gdisconnect():
         response.headers['Content-Type'] = 'application/json'
         return redirect('/catalog')
     else:
-        response = make_response(json.dumps('Failed to revoke token for given user.', 400))
+        response = make_response(json.dumps(
+            'Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -148,6 +157,7 @@ def gdisconnect():
 @app.route('/')
 @app.route('/catalog')
 def showCategories():
+    """Gets a list of all categories in the db and displays them in a template"""
     session = DBSession()
     categories = session.query(Category).all()
     session.commit()
@@ -156,6 +166,7 @@ def showCategories():
 
 @app.route('/catalog/JSON')
 def showCategoriesJSON():
+    """JSON endpoint to show all categories and information about them"""
     session = DBSession()
     db_category = session.query(Category).all()
     categories = list()
@@ -173,6 +184,7 @@ def showCategoriesJSON():
 
 @app.route('/catalog/<string:category>/items')
 def showCategoryItems(category):
+    """Gets items specific to selected category"""
     if 'username' not in login_session:
         return redirect('/login')
     session = DBSession()
@@ -184,6 +196,7 @@ def showCategoryItems(category):
 
 @app.route('/catalog/<string:category>/<string:item>')
 def showItemInfo(category, item):
+    """Shows information based on item selected"""
     if 'username' not in login_session:
         return redirect('/login')
     session = DBSession()
@@ -198,6 +211,7 @@ def showItemInfo(category, item):
 
 @app.route('/catalog/<string:category>/<string:item>/edit', methods=['GET'])
 def editItem(category, item):
+    """Allows authenticated user to edit items within a category"""
     if 'username' not in login_session:
         return redirect('/login')
     new_category = urllib.unquote(category)
@@ -214,6 +228,7 @@ def editItem(category, item):
 
 @app.route('/editItem', methods=['POST'])
 def edit():
+    """Helper route for editing items"""
     decision_maker = request.form
     session = DBSession()
 
@@ -227,6 +242,7 @@ def edit():
 
 @app.route('/catalog/<string:category>/<string:item>/delete', methods=['GET'])
 def deleteItem(category, item):
+    """Allows authenticated user to delete items within a category"""
     if 'username' not in login_session:
         return redirect('/login')
     new_category = urllib.unquote(category)
@@ -237,6 +253,7 @@ def deleteItem(category, item):
 
 @app.route('/deleteItem', methods=['POST'])
 def delete():
+    """Helper route for deleting items"""
     decision_maker = request.form['delete_value']
     session = DBSession()
     if decision_maker != 'no':
@@ -250,8 +267,11 @@ def delete():
 
 @app.route('/catalog/<string:category>/items/add', methods=['GET'])
 def addItem(category):
+    """Allows authenticated user to add items within a category"""
+
     if 'username' not in login_session:
         return redirect('/login')
+
     new_category = urllib.unquote(category)
 
     session = DBSession()
@@ -263,6 +283,7 @@ def addItem(category):
 
 @app.route('/addItem', methods=['POST'])
 def add():
+    """Helper route for adding items"""
     decision_maker = request.form
     session = DBSession()
 
