@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, request, make_response
+from flask import Flask, render_template, request, redirect, jsonify, \
+url_for, flash, request, make_response
 from flask import session as login_session
 
 import random
@@ -30,7 +31,8 @@ DBSession = sessionmaker(bind=engine)
 
 @app.route('/login')
 def showLogin():
-    """Shows login screen when user tries to access information that they must be authenticated for"""
+    """Shows login screen when user tries to access information that they must 
+    be authenticated for"""
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                     for x in xrange(32))
     login_session['state'] = state
@@ -89,7 +91,8 @@ def gconnect():
     stored_access_token = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
     if stored_access_token is not None and gplus_id == stored_gplus_id:
-        response = make_response(json.dumps('Current user is already connected.'),
+        response = make_response(json.dumps('Current user is already \
+        connected.'),
                                  200)
         response.headers['Content-Type'] = 'application/json'
         return response
@@ -115,7 +118,8 @@ def gconnect():
     output += '!</h1>'
     output += '<img src="'
     output += login_session['picture']
-    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
+    output += ' " style = "width: 300px; height: 300px;border-radius: \
+    150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
     flash("you are now logged in as %s" % login_session['username'])
     print "done!"
     return output
@@ -133,7 +137,8 @@ def gdisconnect():
     print 'In gdisconnect access token is %s', access_token
     print 'User name is: '
     print login_session['username']
-    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['access_token']
+    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % \
+        login_session['access_token']
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
     print 'result is '
@@ -157,7 +162,8 @@ def gdisconnect():
 @app.route('/')
 @app.route('/catalog')
 def showCategories():
-    """Gets a list of all categories in the db and displays them in a template"""
+    """Gets a list of all categories in the db and displays them 
+    in a template"""
     session = DBSession()
     categories = session.query(Category).all()
     session.commit()
@@ -206,7 +212,8 @@ def showItemInfo(category, item):
     info = session.query(Item).filter_by(category=new_category, name=new_item)
     session.commit()
 
-    return render_template('showItemInfo.html', category=new_category, item=info)
+    return render_template('showItemInfo.html', category=new_category,
+                           item=info)
 
 
 @app.route('/catalog/<string:category>/<string:item>/edit', methods=['GET'])
@@ -223,7 +230,9 @@ def editItem(category, item):
         category=new_category, name=new_item)
     session.commit()
 
-    return render_template('editItem.html', category=new_category, item=new_item, category_info=category_info, item_info=item_info)
+    return render_template('editItem.html', category=new_category,
+                           item=new_item, category_info=category_info, 
+                           item_info=item_info)
 
 
 @app.route('/editItem', methods=['POST'])
@@ -233,7 +242,9 @@ def edit():
     session = DBSession()
 
     session.query(Item).filter_by(id=decision_maker['itemID']).update(
-        {"name": decision_maker['itemName'], "description": decision_maker['itemDescription'], 'category': decision_maker['itemCategory']})
+        {"name": decision_maker['itemName'],
+         "description": decision_maker['itemDescription'],
+         'category': decision_maker['itemCategory']})
 
     session.commit()
 
@@ -248,7 +259,8 @@ def deleteItem(category, item):
     new_category = urllib.unquote(category)
     new_item = urllib.unquote(item)
 
-    return render_template('deleteItem.html', category=new_category, item=new_item)
+    return render_template('deleteItem.html', category=new_category,
+                           item=new_item)
 
 
 @app.route('/deleteItem', methods=['POST'])
@@ -288,7 +300,8 @@ def add():
     session = DBSession()
 
     new_item = Item(name=decision_maker['itemName'],
-                    description=decision_maker['itemDescription'], category=decision_maker['category'])
+                    description=decision_maker['itemDescription'],
+                    category=decision_maker['category'])
     session.add(new_item)
     session.commit()
 

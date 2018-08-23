@@ -51,19 +51,29 @@ session.commit()
  
 
 # Insert a few starting items into the item table
-cleats = Item(name='cleats', description='special shoes worn when playing soccer', category=soccer.name)
+cleats = Item(name='cleats', 
+description='special shoes worn when playing soccer', category=soccer.name)
 session.add(cleats)
 
-ball = Item(name='ball', description='a ball specifically designed for playing a game of soccer', category=soccer.name)
+ball = Item(name='ball',
+ description='a ball specifically designed for playing a game of soccer', 
+ category=soccer.name)
 session.add(ball)
 
-shinguards = Item(name='shinguards', description='guards to protect your shins when playing soccer', category=soccer.name)
+shinguards = Item(name='shinguards', 
+description='guards to protect your shins when playing soccer', 
+category=soccer.name)
 session.add(shinguards)
 
-goggles = Item(name='goggles', description='protective glasses worn when snowboarding to keep your eyes safe', category=snowboarding.name)
+goggles = Item(name='goggles', 
+description='protective glasses worn when snowboarding to keep your eyes safe',
+ category=snowboarding.name)
 session.add(goggles)
 
-snowboard = Item(name='snowboard', description='Most important piece of equipment for snowboarding; used to carving down mountains', category=snowboarding.name)
+snowboard = Item(name='snowboard',
+ description='Most important piece of equipment for \
+ snowboarding; used to carving down mountains', 
+ category=snowboarding.name)
 session.add(snowboard)
 
 session.commit()
