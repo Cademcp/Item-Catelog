@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, jsonify, \
-url_for, flash, request, make_response
+    url_for, flash, request, make_response
 from flask import session as login_session
 
 import random
@@ -31,7 +31,7 @@ DBSession = sessionmaker(bind=engine)
 
 @app.route('/login')
 def showLogin():
-    """Shows login screen when user tries to access information that they must 
+    """Shows login screen when user tries to access information that they must
     be authenticated for"""
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                     for x in xrange(32))
@@ -162,7 +162,7 @@ def gdisconnect():
 @app.route('/')
 @app.route('/catalog')
 def showCategories():
-    """Gets a list of all categories in the db and displays them 
+    """Gets a list of all categories in the db and displays them
     in a template"""
     session = DBSession()
     categories = session.query(Category).all()
@@ -231,7 +231,7 @@ def editItem(category, item):
     session.commit()
 
     return render_template('editItem.html', category=new_category,
-                           item=new_item, category_info=category_info, 
+                           item=new_item, category_info=category_info,
                            item_info=item_info)
 
 
