@@ -1,0 +1,15 @@
+<html>
+    <head>
+    </head>
+
+    <body>
+        <h1>Add Category</h1>
+        <form action="{{ url_for('addCategoryPOST') }}" name="add" method="POST">
+            Category Name:<br>
+            <input type="text" name="categoryName" value="name goes here">
+            <br><br>
+            <input type="button" onclick="location.href='http://localhost:5000/catalog';" value="Back To Categories" />
+            <input type="submit" value="Submit">
+        </form> 
+    </body>
+</html>

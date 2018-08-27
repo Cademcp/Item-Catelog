@@ -172,7 +172,11 @@ def showCategories():
     session = DBSession()
     categories = session.query(Category).all()
     session.commit()
-    return render_template('home.html', item=categories)
+
+    if 'username' not in login_session:
+        return render_template('publichome.html', item=categories)
+    else:
+        return render_template('home.html', item=categories)
 
 
 @app.route('/JSON')
@@ -209,14 +213,14 @@ def showCategoriesJSON():
 def showCategoryItems(category):
     """Gets items specific to selected category"""
     session = DBSession()
-
     temp_category = session.query(Category).filter_by(name=category).first()
     items = session.query(Item).filter_by(category=category)
     session.commit()
 
     creator = getUserInfo(temp_category.id)
-    if 'username' not in login_session or creator.id != login_session['user_id']:
-        return render_template('publicshowitems.html', category=category, item=items)
+    if 'username' not in login_session or creator.id!=login_session['user_id']:
+        return render_template('publicshowitems.html', category=category,
+                               item=items)
     else:
         return render_template('showItems.html', category=category, item=items)
 
@@ -234,6 +238,7 @@ def showItemJSON(category):
     session.commit()
 
     return jsonify(Items=temp)
+
 
 @app.route('/catalog/<string:category>/<string:item>')
 def showItemInfo(category, item):
@@ -338,6 +343,25 @@ def add():
                     description=decision_maker['itemDescription'],
                     category=decision_maker['category'],
                     user_id=login_session['user_id'])
+    session.add(new_item)
+    session.commit()
+
+    return redirect('http://localhost:5000')
+
+
+@app.route('/catalog/add', methods=['GET'])
+def addCategory():
+    """Allows authenticated user to add new Categories to catalog"""
+    return render_template('addCategory.html')
+        
+
+@app.route('/catalog/addCategory', methods=['POST'])
+def addCategoryPOST():
+    decision_maker = request.form
+    session = DBSession()
+
+    new_item = Category(name=decision_maker['categoryName'],
+                        user_id=login_session['user_id'])
     session.add(new_item)
     session.commit()
 
