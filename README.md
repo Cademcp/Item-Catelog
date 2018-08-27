@@ -52,6 +52,32 @@ python application.py
 
 To access the application in your browser, visit http://localhost:5000 or http://localhost:5000/catalog
 
+## API Endpoints
+
+* /catalog
+    * This is the root directory of the program. It displays all of the categories that are currently stored in the catalog
+    
+* /JSON
+    * This shows all information stored in the catalog in JSON format
+* /catalog/add
+    * This allows an authenticated user to add new categories to the catalog that only they will be allowed to edit
+* /catalog/JSON
+    * This shows all the categories in the catalog in JSON format
+* /catalog/[category]/items
+    * This displays all items that are within a specific category
+* /catalog/[category]/items/JSON
+    * This displays all items within a specific category in JSON format
+* /catalog/[category]/items/add
+    * This allows a user to add new items to a category that they have created
+* /catalog/[category]/[item]
+    * This displays a description about a specific item within a specific category
+* /catalog/[category]/[item]/edit
+    * This renders a dynamic form for a user to fill out to edit an existing item in the catalog as long as they were the user who created that category
+* /catalog/[category]/[item]/delete
+    * This allows a user to delete items within a category that they have created as long as they are logged in
+
+
+
 ## Built With
 
 * [Python 2.7](https://docs.python.org/2/index.html) - Programming Language
