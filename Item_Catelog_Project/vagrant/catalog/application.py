@@ -15,7 +15,7 @@ from oauth2client.client import FlowExchangeError
 from sqlalchemy import create_engine, inspect
 from sqlalchemy.orm import sessionmaker
 
-from dbsetup import Category, Base, Item
+from dbsetup import Category, Base, Item, User
 
 
 app = Flask(__name__)
@@ -112,6 +112,11 @@ def gconnect():
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
+    user_id = getUserID(login_session['email'])
+    if not user_id:
+        user_id = createUser(login_session)
+    login_session['user_id'] = user_id
+
     output = ''
     output += '<h1>Welcome, '
     output += login_session['username']
@@ -203,13 +208,17 @@ def showCategoriesJSON():
 @app.route('/catalog/<string:category>/items')
 def showCategoryItems(category):
     """Gets items specific to selected category"""
-    if 'username' not in login_session:
-        return redirect('/login')
     session = DBSession()
 
+    temp_category = session.query(Category).filter_by(name=category).first()
     items = session.query(Item).filter_by(category=category)
     session.commit()
-    return render_template('showItems.html', category=category, item=items)
+
+    creator = getUserInfo(temp_category.id)
+    if 'username' not in login_session or creator.id != login_session['user_id']:
+        return render_template('publicshowitems.html', category=category, item=items)
+    else:
+        return render_template('showItems.html', category=category, item=items)
 
 
 @app.route('/catalog/<string:category>/items/JSON')
@@ -327,11 +336,39 @@ def add():
 
     new_item = Item(name=decision_maker['itemName'],
                     description=decision_maker['itemDescription'],
-                    category=decision_maker['category'])
+                    category=decision_maker['category'],
+                    user_id=login_session['user_id'])
     session.add(new_item)
     session.commit()
 
     return redirect('http://localhost:5000')
+
+
+def createUser(login_session):
+    newUser = User(name=login_session['username'], email=login_session[
+                   'email'], picture=login_session['picture'])
+    session = DBSession()
+    session.add(newUser)
+    session.commit()
+    user = session.query(User).filter_by(email=login_session['email']).one()
+    return user.id
+
+
+def getUserInfo(user_id):
+    session = DBSession()
+    user = session.query(User).filter_by(id=user_id).first()
+    session.commit()
+    return user
+
+
+def getUserID(email):
+    try:
+        session = DBSession()
+        user = session.query(User).filter_by(email=email).one()
+        session.commit()
+        return user.id
+    except:
+        return None
 
 
 if __name__ == '__main__':

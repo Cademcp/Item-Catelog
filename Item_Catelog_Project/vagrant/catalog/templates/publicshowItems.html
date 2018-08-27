@@ -1,0 +1,14 @@
+<html>
+    <head>
+    </head>
+
+    <body>
+        <h1>{{ category }} Items</h1>
+
+          {% for i in item %}
+          <a href="http://localhost:5000/catalog/{{category}}/{{i.name}}">{{ i.name }}</a> <br><br>
+          {% endfor %}
+
+          <input type="button" onclick="location.href='http://localhost:5000/catalog';" value="Back To Categories" />
+    </body>
+</html>
