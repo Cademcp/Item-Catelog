@@ -213,11 +213,13 @@ def showCategoriesJSON():
 def showCategoryItems(category):
     """Gets items specific to selected category"""
     session = DBSession()
-    temp_category = session.query(Category).filter_by(name=category).first()
+
+    temp_category = session.query(Category).filter_by(name=category).one()
     items = session.query(Item).filter_by(category=category)
+
     session.commit()
 
-    creator = getUserInfo(temp_category.id)
+    creator = getUserInfo(temp_category.user_id)
     if 'username' not in login_session or creator.id!=login_session['user_id']:
         return render_template('publicshowitems.html', category=category,
                                item=items)
@@ -380,7 +382,7 @@ def createUser(login_session):
 
 def getUserInfo(user_id):
     session = DBSession()
-    user = session.query(User).filter_by(id=user_id).first()
+    user = session.query(User).filter_by(id=user_id).one()
     session.commit()
     return user
 
