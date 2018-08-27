@@ -170,9 +170,9 @@ def showCategories():
     return render_template('home.html', item=categories)
 
 
-@app.route('/catalog/JSON')
-def showCategoriesJSON():
-    """JSON endpoint to show all categories and information about them"""
+@app.route('/JSON')
+def showAllJSON():
+    """JSON endpoint to show all information held in the catalog"""
     session = DBSession()
     db_category = session.query(Category).all()
     categories = list()
@@ -188,6 +188,18 @@ def showCategoriesJSON():
     return jsonify(Category=categories)
 
 
+@app.route('/catalog/JSON')
+def showCategoriesJSON():
+    """JSON endpoint to show all categories and information about them"""
+    session = DBSession()
+    db_category = session.query(Category).all()
+    categories = list()
+    for category in db_category:
+        categories.append({'id': category.id, 'name': category.name})
+    session.commit()
+    return jsonify(Category=categories)
+
+
 @app.route('/catalog/<string:category>/items')
 def showCategoryItems(category):
     """Gets items specific to selected category"""
@@ -199,6 +211,20 @@ def showCategoryItems(category):
     session.commit()
     return render_template('showItems.html', category=category, item=items)
 
+
+@app.route('/catalog/<string:category>/items/JSON')
+def showItemJSON(category):
+    """JSON endpoint to show items specific to a category"""
+    session = DBSession()
+
+    items = session.query(Item).filter_by(category=category)
+
+    temp = list()
+    for item in items:
+        temp.append({'id': item.id, 'name': item.name})
+    session.commit()
+
+    return jsonify(Items=temp)
 
 @app.route('/catalog/<string:category>/<string:item>')
 def showItemInfo(category, item):
