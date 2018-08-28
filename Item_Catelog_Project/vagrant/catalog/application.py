@@ -261,12 +261,17 @@ def showItemInfo(category, item):
 @app.route('/catalog/<string:category>/<string:item>/edit', methods=['GET'])
 def editItem(category, item):
     """Allows authenticated user to edit items within a category"""
-    if 'username' not in login_session:
-        return redirect('/login')
+    session = DBSession()
+
+    temp_category = session.query(Category).filter_by(name=category).one()
+    creator = getUserInfo(temp_category.user_id)
+
+    if 'username' not in login_session or creator.id!=login_session['user_id']:
+        return render_template('accessDenied.html')
+
     new_category = urllib.unquote(category)
     new_item = urllib.unquote(item)
 
-    session = DBSession()
     category_info = session.query(Category).all()
     item_info = session.query(Item).filter_by(
         category=new_category, name=new_item)
@@ -296,8 +301,14 @@ def edit():
 @app.route('/catalog/<string:category>/<string:item>/delete', methods=['GET'])
 def deleteItem(category, item):
     """Allows authenticated user to delete items within a category"""
-    if 'username' not in login_session:
-        return redirect('/login')
+    session = DBSession()
+
+    temp_category = session.query(Category).filter_by(name=category).one()
+    creator = getUserInfo(temp_category.user_id)
+
+    if 'username' not in login_session or creator.id!=login_session['user_id']:
+        return render_template('accessDenied.html')
+
     new_category = urllib.unquote(category)
     new_item = urllib.unquote(item)
 

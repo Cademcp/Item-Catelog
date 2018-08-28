@@ -6,13 +6,13 @@
         <h1>Add Item</h1>
         <form action="{{ url_for('add') }}" name="add" method="POST">
             Item Name:<br>
-            <input type="text" name="itemName" value="name goes here">
+            <input type="text" name="itemName" value="name goes here" required>
             <br><br>
             Item Description:<br>
-            <textarea rows="4" cols="50" name="itemDescription" value="Description goes here">Description goes here</textarea>
+            <textarea rows="4" cols="50" name="itemDescription" value="Description goes here" required>Description goes here</textarea>
             <br><br>
             Category:<br>
-            <select name="category">
+            <select name="category" required>
                 {% for i in info %}
                 <option name="{{ i.name }}">{{ i.name }}</option>
                 {% endfor %}
